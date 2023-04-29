@@ -1,62 +1,52 @@
-import csv
-import io
+from fastapi import FastAPI, File, UploadFile
 import mysql.connector
-from fastapi import FastAPI, UploadFile, File
 
 app = FastAPI()
 
 # Define MySQL connection parameters
-config = {
+mysql_config = {
     'user': 'admin',
     'password': 'Azure123.',
     'host': 'database-api.conxcscqngr8.us-east-1.rds.amazonaws.com',
-    'database': 'database_rest_api',
-    'raise_on_warnings': True
+    'database': 'database_rest_api'
 }
 
-# Define batch size
+# Define the INSERT query to insert rows into the MySQL table
+insert_query = "INSERT INTO tb_jobs (id, job) VALUES (%d, %s)"
+
+# Define the batch size
 batch_size = 100
 
-@app.post("/upload-csv/")
-async def upload_csv(file: UploadFile = File(...)):
-
-    # Connect to MySQL
-    cnx = mysql.connector.connect(**config)
-
-    # Create cursor
+@app.post("/uploadfile/")
+async def create_upload_file(file: UploadFile = File(...)):
+    # Open a connection to MySQL
+    cnx = mysql.connector.connect(**mysql_config)
     cursor = cnx.cursor()
 
-    # Read CSV file
-    csv_file = io.StringIO(await file.read().decode())
-    csv_reader = csv.reader(csv_file)
-
-    # Skip header row
-    next(csv_reader)
-
-    # Initialize batch
-    batch = []
-
-    # Iterate over rows
-    for row in csv_reader:
-        # Extract data
-        id = row[0]
-        job = row[1]
-
-        # Append data to batch
-        batch.append((id, job))
-
-        # If batch size reached, insert data into MySQL
-        if len(batch) == batch_size:
-            cursor.executemany("INSERT INTO youtb_jobsr_table (id, job) VALUES (%d, %s)", batch)
-            batch = []
-
+    # Read the CSV file in batches of 100 rows
+    rows = []
+    for line_no, line in enumerate(file.file):
+        # Skip the header line
+        if line_no == 0:
+            continue
+        # Parse the line to get the values
+        values = line.decode('utf-8').strip().split(',')
+        id = int(values[0])
+        job = values[1]
+        # Append the row to the rows list
+        rows.append((id, job))
+        # If the rows list has reached the batch size, insert the rows into the table
+        if len(rows) == batch_size:
+            cursor.executemany(insert_query, rows)
+            cnx.commit()
+            rows = []
+    
     # Insert any remaining rows
-    if len(batch) > 0:
-        cursor.executemany("INSERT INTO tb_jobs (id, job) VALUES (%d, %s)", batch)
+    if rows:
+        cursor.executemany(insert_query, rows)
+        cnx.commit()
 
-    # Commit changes and close connection
-    cnx.commit()
+    # Close the cursor and connection to MySQL
     cursor.close()
     cnx.close()
-
-    return {"message": "CSV file uploaded and inserted into MySQL database."}
+    return {"filename": file.filename}
