@@ -55,6 +55,7 @@ async def create_upload_file(file: UploadFile = File(...)):
     if file.content_type == "text/csv":
         csv_data = file.file.read().decode("utf-8")
         csv_reader = csv.reader(csv_data.splitlines())
+        next(csv_reader)  # skip header row
         
         # Insert data into MySQL table in batches of 1000
         batch_size = 1000
