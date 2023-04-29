@@ -46,7 +46,7 @@ async def create_upload_file(file: UploadFile = File(...)):
         user = "admin",
         password = "Azure123.",
         database = "database_rest_api"
-    }
+    )
 
     # Create a cursor object to execute SQL queries
     cursor = cnx.cursor()
