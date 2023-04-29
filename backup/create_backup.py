@@ -35,15 +35,21 @@ def backup_table_to_avro():
     # Create MySQL cursor
     cursor = conn.cursor()
 
+    temp = "cursor"
+
     # Fetch total rows count
     cursor.execute(f"SELECT COUNT(*) FROM {MYSQL_TABLE}")
     total_rows = cursor.fetchone()[0]
+
+    temp = "fetch"
 
     # Create Avro file
     avro_file = f"{MYSQL_TABLE}.avro"
     with open(avro_file, 'wb') as f:
         # Write Avro schema to file
         fastavro.schemaless_writer(f, AVRO_SCHEMA)
+
+        temp = "write"
 
         # Fetch data from MySQL table in batches and write to Avro file
         batch_size = 100
@@ -53,12 +59,15 @@ def backup_table_to_avro():
             rows = cursor.fetchall()
             fastavro.schemaless_writer(f, AVRO_SCHEMA, rows)
             offset += batch_size
+            temp = "while" 
 
     # Close MySQL connection and cursor
     cursor.close()
     conn.close()
     
-    print("fin")
+    temp = "fin"
 
     # Return Avro file path
-    return os.path.abspath(avro_file)
+    #return os.path.abspath(avro_file)
+
+    return temp
