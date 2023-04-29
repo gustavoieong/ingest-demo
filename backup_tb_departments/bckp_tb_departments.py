@@ -1,47 +1,50 @@
+import avro.schema
+import avro.datafile
+import avro.io
 import mysql.connector
-import fastavro
-import datetime
 
-# Define schema
-schema = {
-    'namespace': 'my_namespace',
-    'type': 'record',
-    'name': 'my_record',
-    'fields': [
-        {'name': 'id', 'type': 'int'},
-        {'name': 'department', 'type': 'string'}
-    ]
+# Define the Avro schema for the table backup
+schema = avro.schema.parse('''
+    {
+      "namespace": "example.avro",
+      "type": "record",
+      "name": "bckp_tb_department",
+      "fields": [
+        {"name": "id", "type": "int"},
+        {"name": "department", "type": "string"}
+      ]
+    }
+''')
+
+# Define MySQL connection parameters
+db_config = {
+    'host': 'database-api.conxcscqngr8.us-east-1.rds.amazonaws.com',
+    'user': 'admin',
+    'password': 'Azure123.',
+    'database': 'database_rest_api'
 }
 
-def main():
-    # Connect to MySQL database
-    cnx = mysql.connector.connect(user='admin', password='Azure123.',
-                                host='database-api.conxcscqngr8.us-east-1.rds.amazonaws.com', database='database_rest_api')
-    cursor = cnx.cursor()
+# Define the name of the table to back up
+table_name = 'tb_departments'
 
-    # Execute SELECT query to retrieve data from table
-    query = ("SELECT id, department FROM tb_departments")
-    cursor.execute(query)
+# Define the batch size for the backup
+batch_size = 1000
 
-    # Open file for writing Avro data
-    filename = 'backup_' + datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S") + '.avro'
-    with open(filename, 'wb') as avro_file:
+# Open the Avro data file for writing
+avro_file = avro.datafile.DataFileWriter(open('backup.avro', 'wb'), avro.io.DatumWriter(), schema)
 
-        # Initialize Avro writer
-        avro_writer = fastavro.writer(avro_file, schema, codec='deflate')
+# Connect to MySQL and retrieve the table data in batches
+with mysql.connector.connect(**db_config) as conn:
+    cursor = conn.cursor()
+    cursor.execute(f'SELECT * FROM {table_name}')
+    while True:
+        rows = cursor.fetchmany(batch_size)
+        if not rows:
+            break
+        # Convert the MySQL rows to Avro records and write them to the data file
+        for row in rows:
+            record = {'id': str(row[0]), 'department': str(row[1])}
+            avro_file.append(record)
 
-        # Write data to Avro file in batches
-        batch_size = 100
-        while True:
-            rows = cursor.fetchmany(batch_size)
-            if not rows:
-                break
-            for row in rows:
-                avro_writer.write({'id': row[0], 'department': row[1], 'department_id': row[2]})
-
-    # Close cursor and database connection
-    cursor.close()
-    cnx.close()
-
-if __name__ == "__main__":
-    main()
+# Close the Avro data file
+avro_file.close()
