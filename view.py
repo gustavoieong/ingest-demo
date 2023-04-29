@@ -11,7 +11,8 @@ cnx = mysql.connector.connect(user = mysql_user, password = mysql_password,
                               host = mysql_host, database = mysql_database)
 
 # Create a cursor object
-cursor = cnx.cursor()
+#cursor = cnx.cursor()
+cursor = cnx.cursor(buffered=True)
 
 table_name = "tb_departments"
 cursor.execute(f"DESCRIBE {table_name}")
