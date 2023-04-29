@@ -12,7 +12,7 @@ mysql_config = {
 }
 
 # Define the INSERT query to insert rows into the MySQL table
-insert_query = "INSERT INTO tb_jobs (id, job) VALUES (%d, %s)"
+insert_query = "INSERT INTO tb_jobs (id, job) VALUES (%s, %s)"
 
 # Define the batch size
 batch_size = 100
