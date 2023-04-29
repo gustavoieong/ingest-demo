@@ -1,7 +1,9 @@
-from flask import Flask, request
+import csv
 import mysql.connector
+from fastapi import FastAPI, File, UploadFile
+import traceback
 
-app = Flask(__name__)
+app = FastAPI()
 
 # MySQL configuration
 db_config = {
@@ -11,9 +13,40 @@ db_config = {
     'database': 'database_rest_api',
 }
 
-# Endpoint to receive CSV file
-@app.route('/upload_csv', methods=['POST'])
-def upload_csv():
+def generate_table(filename):
+    create_table_query = ""
+    if (filename == "departments.csv"):
+        create_table_query = """CREATE TABLE IF NOT EXISTS tb_departments (
+                             id INT,
+                             name VARCHAR(255),
+                             datetime VARCHAR(255),
+                             department_id INT,
+                             job_id INT
+                             );"""
+    if (filename == "hired_employees.csv"):
+        create_table_query = """CREATE TABLE IF NOT EXISTS tb_hired_employees (
+                             id INT,
+                             department VARCHAR(255)
+                             );"""
+    if (filename == "jobs.csv"):
+        create_table_query = """CREATE TABLE IF NOT EXISTS tb_jobs (
+                             id INT,
+                             job VARCHAR(255)
+                             );"""
+    return create_table_query
+
+def generate_query(filename):
+    insert_query = ""
+    if (filename == "departments.csv"):
+        insert_query = """INSERT INTO tb_departments (id, name, datetime, department_id, job_id) VALUES (%d, %s, %s, %d, %d);"""
+    if (filename == "hired_employees.csv"):
+        insert_query = """INSERT INTO tb_hired_employes (id, job) VALUES (%d, %s);"""
+    if (filename == "jobs.csv"):
+        insert_query = """INSERT INTO tb_jobs (id, job) VALUES (%d, %s);"""
+    return insert_query
+
+@app.post("/uploadfile/")
+async def create_upload_file(file: UploadFile = File(...)):
     # Connect to MySQL
     conn = mysql.connector.connect(**db_config)
     cursor = conn.cursor()
@@ -32,22 +65,19 @@ def upload_csv():
         count += 1
         # Insert rows into MySQL in batches of 1000
         if count % 1000 == 0:
-            insert_query = "INSERT INTO tb_jobs (id, job) VALUES (%d, %s);"
+            insert_query = generate_query(file.filename)
             cursor.executemany(insert_query, rows)
             conn.commit()
             rows = []
 
     # Insert any remaining rows
     if rows:
-        insert_query = "INSERT INTO tb_jobs VALUES (%d, %s)"
+        insert_query = generate_query(file.filename)
         cursor.executemany(insert_query, rows)
         conn.commit()
 
-    # Close MySQL connection
+    # Close the cursor and connection
     cursor.close()
-    conn.close()
+    cnx.close()
 
-    return 'CSV file uploaded and inserted into MySQL.'
-
-if __name__ == '__main__':
-    app.run(debug=True)
+    return {"filename": file.filename}
