@@ -2,7 +2,7 @@ import csv
 import mysql.connector
 from fastapi import FastAPI, File, UploadFile
 import traceback
-import requests
+import request
 
 app = FastAPI()
 
