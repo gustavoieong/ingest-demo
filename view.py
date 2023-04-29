@@ -2,7 +2,7 @@ import mysql.connector
 import time
 
 mysql_user = "admin"
-mysql_password = "Azure123."
+mysql_password = "Azure123..."
 mysql_host = "database-api.conxcscqngr8.us-east-1.rds.amazonaws.com"
 mysql_database = "database_rest_api"
 
