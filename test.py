@@ -19,7 +19,7 @@ cursor.execute(f"DESCRIBE {table_name}")
 time.sleep(13)
 
 # Execute a SELECT query
-query = """SELECT * FROM tb_departments;"""
+query = """SELECT COUNT(*) cant FROM tb_departments;"""
 cursor.execute(query)
 
 # Fetch all rows and print them
