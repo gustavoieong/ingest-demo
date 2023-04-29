@@ -19,7 +19,7 @@ async def create_upload_file(file: UploadFile = File(...)):
     #csv_reader = csv.DictReader(await file.read().decode('utf-8').splitlines())
     archivo = file.read()
     #archivo = archivo.decode('utf-8')
-    archivo = archivo.splitlines()
+    #archivo = archivo.splitlines()
     csv_reader = csv.DictReader(await archivo)
     #csv_reader = csv.DictReader(await file.read().decode('utf-8').splitlines())
 
