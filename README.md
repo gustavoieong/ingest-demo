@@ -8,16 +8,18 @@ pip3 install "fastapi[all]"
 # Install dependencies for sending files
 pip3 install requests
 
-# Install dependencies for connecting database
+# Install dependencies for connecting to database
 pip3 install mysql-connector-python
 
 # Clone repository
 git clone https://github.com/gustavoieong/ingest-demo.git
 
-# Execute main.py for testing
+# Start REST API endpoint
 python3 -m uvicorn main:app --reload
 
 # Send CSV files
 python3 sender.py
 
+# Install dependencies for backup database
+pip install avro-python3
 
