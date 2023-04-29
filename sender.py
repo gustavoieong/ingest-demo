@@ -12,4 +12,4 @@ with open("input/hired_employees.csv", "rb") as f:
 
 with open("input/jobs.csv", "rb") as f:
     r = requests.post(url, files={"file": f})
-    print(r.json())
+    #print(r.json())
