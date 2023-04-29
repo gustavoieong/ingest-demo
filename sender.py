@@ -1,6 +1,6 @@
 import requests
 
-url = "http://127.0.0.1:48504/uploadfile"
+url = "http://127.0.0.1/uploadfile"
 
 with open("input/departments.csv", "rb") as f:
     r = requests.post(url, files={"file": f})
