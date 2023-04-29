@@ -51,6 +51,9 @@ async def create_upload_file(file: UploadFile = File(...)):
     conn = mysql.connector.connect(**db_config)
     cursor = conn.cursor()
 
+    contents = file.file.read().decode('utf-8')
+    file = contents.split("\n")
+
     # Loop through the file and insert data into MySQL in batches of 1000 rows
     rows = []
     count = 0
