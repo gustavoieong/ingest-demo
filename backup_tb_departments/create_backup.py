@@ -2,6 +2,8 @@ import mysql.connector
 import avro.schema
 from avro.datafile import DataFileWriter
 from avro.io import DatumWriter
+import os
+import fastavro
 
 # Connect to MySQL
 mydb = mysql.connector.connect(
