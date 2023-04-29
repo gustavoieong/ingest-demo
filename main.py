@@ -41,7 +41,7 @@ def generate_query(filename):
 async def create_upload_file(file: UploadFile = File(...)):
     # Parse the CSV file
     contents = await file.read()
-    csv_reader = csv.reader(contents.decode().splitlines())
+    reader = csv.reader(contents.decode().splitlines())
     #print(contents.decode())
     print(file.filename)
 
@@ -62,35 +62,17 @@ async def create_upload_file(file: UploadFile = File(...)):
     insert_query = generate_query(file.filename)
 
     # Open the CSV file for reading
-    with open(csv_reader) as csvfile:
-        reader = csv.DictReader(csvfile)
+  
 
-        # Insert rows in batches of 1000
-        batch_size = 1000
-        batch = []
-        for row in reader:
-            # Append the row to the batch
-            batch.append(row)
+    # Insert rows in batches of 1000
+    batch_size = 1000
+    batch = []
+    for row in reader:
+        # Append the row to the batch
+        batch.append(row)
 
-            # If the batch is full, insert the rows and reset the batch
-            if len(batch) == batch_size:
-                insert_query = generate_query(file.filename)
-                try:
-                    cursor.executemany(insert_query)
-                except Exception as e:
-                    # log the error message to a file
-                    damage_row = str(row)
-                    with open('error_log.txt', 'a') as f:
-                        f.write(f"Error message: {str(e)}\n")
-                        f.write(f"Error message: {str(damage_row)}\n")
-                        f.write(traceback.format_exc() + "\n")
-                    # continue execution, skipping the line that raised the exception
-                    pass
-                cnx.commit()
-                batch = []
-
-        # Insert any remaining rows
-        if batch:
+        # If the batch is full, insert the rows and reset the batch
+        if len(batch) == batch_size:
             insert_query = generate_query(file.filename)
             try:
                 cursor.executemany(insert_query)
@@ -104,6 +86,23 @@ async def create_upload_file(file: UploadFile = File(...)):
                 # continue execution, skipping the line that raised the exception
                 pass
             cnx.commit()
+            batch = []
+
+    # Insert any remaining rows
+    if batch:
+        insert_query = generate_query(file.filename)
+        try:
+            cursor.executemany(insert_query)
+        except Exception as e:
+            # log the error message to a file
+            damage_row = str(row)
+            with open('error_log.txt', 'a') as f:
+                f.write(f"Error message: {str(e)}\n")
+                f.write(f"Error message: {str(damage_row)}\n")
+                f.write(traceback.format_exc() + "\n")
+            # continue execution, skipping the line that raised the exception
+            pass
+        cnx.commit()
 
     # Close the cursor and connection
     cursor.close()
