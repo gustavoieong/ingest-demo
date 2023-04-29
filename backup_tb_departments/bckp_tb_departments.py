@@ -37,7 +37,7 @@ def main():
             if not rows:
                 break
             for row in rows:
-                avro_writer.write({'id': row[0], 'department': row[1]})
+                avro_writer.write({'id': row[0], 'department': row[1], 'department_id': row[2]})
 
     # Close cursor and database connection
     cursor.close()
