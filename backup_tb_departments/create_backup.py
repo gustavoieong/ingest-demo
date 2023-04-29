@@ -11,15 +11,22 @@ mydb = mysql.connector.connect(
   database="database_rest_api"
 )
 
-# Define the schema for your Avro file
-schema = avro.schema.Parse(open("tb_departments.avsc").read())
+# Avro schema definition
+AVRO_SCHEMA = {
+    "type": "record",
+    "name": "TableBackup",
+    "fields": [
+        {"name": "id", "type": "int"},
+        {"name": "department", "type": "string"}
+    ]
+}
 
 # Define the batch size for your backup
 batch_size = 1000
 
 # Open the Avro file for writing
 with open("backup.avro", "wb") as avro_file:
-  writer = DataFileWriter(avro_file, DatumWriter(), schema)
+  writer = DataFileWriter(avro_file, DatumWriter(), AVRO_SCHEMA)
 
   # Start the backup by selecting the rows from the MySQL table in batches
   cursor = mydb.cursor()
