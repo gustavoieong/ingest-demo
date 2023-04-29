@@ -31,7 +31,7 @@ CREATE TABLE IF NOT EXISTS tb_hired_employees (
                              );
 CREATE TABLE IF NOT EXISTS tb_jobs (
                              id INT,
-                             job_id VARCHAR(255)
+                             job VARCHAR(255)
                              );
 """
 cursor.execute(query)
