@@ -13,6 +13,10 @@ cnx = mysql.connector.connect(user = mysql_user, password = mysql_password,
 # Create a cursor object
 cursor = cnx.cursor()
 
+table_name = "tb_departments"
+cursor.execute(f"DESCRIBE {table_name}")
+time.sleep(13)
+
 # Execute a SELECT query
 query = "SELECT * FROM tb_departments"
 cursor.execute(query)
