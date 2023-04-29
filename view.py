@@ -21,12 +21,12 @@ def main():
     # Fetch all rows and display in terminal
 
     with open('output.txt', 'a') as f:
-    f.write('This is some text that I want to write to a file.\n')
-    rows = mycursor.fetchall()
-    for row in rows:
-        print(row)
-        f.write(row)
-        f.write('\n')
+        f.write('This is some text that I want to write to a file.\n')
+        rows = mycursor.fetchall()
+        for row in rows:
+            print(row)
+            f.write(row)
+            f.write('\n')
 
     # Close cursor and database connection
     mycursor.close()
