@@ -55,8 +55,9 @@ async def create_upload_file(file: UploadFile = File(...)):
     temp = "cursor"
 
     # Open and read CSV file
-    if file.content_type == "text/csv":
+    #if file.content_type == "text/csv":
         csv_data = file.file.read().decode("utf-8")
+        temp = "csv_data decoded"
         csv_reader = csv.reader(csv_data.splitlines())
         #next(csv_reader)  # skip header row
         temp = "csv_reader created"
@@ -81,5 +82,5 @@ async def create_upload_file(file: UploadFile = File(...)):
         cursor.close()
         cnx.close()
         return {"message": "File uploaded successfully."}
-    else:
-        return temp #{"message": "Only CSV files are allowed."}
+    #else:
+     #   return temp #{"message": "Only CSV files are allowed."}
