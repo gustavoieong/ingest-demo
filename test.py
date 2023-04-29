@@ -19,7 +19,12 @@ cursor.execute(f"DESCRIBE {table_name}")
 time.sleep(13)
 
 # Execute a SELECT query
-query = "SELECT * FROM tb_departments"
+query = "CREATE TABLE IF NOT EXISTS tb_departments (
+                             id INT,
+                             name VARCHAR(255),
+                             datetime VARCHAR(255),
+                             department_id INT,
+                             job_id INT"
 cursor.execute(query)
 
 # Fetch all rows and print them
