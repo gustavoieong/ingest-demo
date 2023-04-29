@@ -24,25 +24,8 @@ cursor.execute(query)
 
 # Fetch all rows and print them
 for row in cursor.fetchall():
+    print("cantidad: ")
     print(row)
-
-# Execute a SELECT query
-query = "SELECT * FROM tb_hired_employees"
-cursor.execute(query)
-
-# Fetch all rows and print them
-for row in cursor.fetchall():
-    print(row)
-
-# Execute a SELECT query
-query = "SELECT * FROM tb_jobs"
-cursor.execute(query)
-
-# Fetch all rows and print them
-for row in cursor.fetchall():
-    print(row)
-    time.sleep(3)
-
 
 
 # Close the cursor and database connections
