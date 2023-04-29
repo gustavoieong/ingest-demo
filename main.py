@@ -5,9 +5,9 @@ import traceback
 
 app = FastAPI()
 
-def generate_table(string filename):
+def generate_table(filename):
     create_table_query = ""
-    if (file == 'departments.csv'):
+    if (file == "departments.csv"):
         create_table_query = """CREATE TABLE IF NOT EXISTS tb_departments (
                              id INT,
                              name VARCHAR(255),
@@ -15,25 +15,25 @@ def generate_table(string filename):
                              department_id INT,
                              job_id INT
                              );"""
-    if (file == 'hired_employees.csv'):
+    if (file == "hired_employees.csv"):
         create_table_query = """CREATE TABLE IF NOT EXISTS tb_hired_employees (
                              id INT,
                              department VARCHAR(255)
                              );"""
-    if (file == 'jobs.csv'):
+    if (file == "jobs.csv"):
         create_table_query = """CREATE TABLE IF NOT EXISTS tb_jobs (
                              id INT,
                              job VARCHAR(255)
                              );"""
     return create_table_query
 
-def generate_query(string filename):
+def generate_query(filename):
     insert_query = ""
-    if (file == 'departments.csv'):
+    if (file == "departments.csv"):
         insert_query = """INSERT INTO my_table (id, name, datetime, department_id, job_id) VALUES (%d, %s, %s, %d, %d);"""
-    if (file == 'departments.csv'):
+    if (file == "departments.csv"):
         insert_query = """INSERT INTO my_table (id, job) VALUES (%d, %s);"""
-    if (file == 'departments.csv'):
+    if (file == "departments.csv"):
         insert_query = """INSERT INTO my_table (id, job) VALUES (%d, %s);"""
     return insert_query
 
@@ -45,8 +45,13 @@ async def create_upload_file(file: UploadFile = File(...)):
     #print(contents.decode())
     print(file.filename)
 
+    mysql_user = "admin"
+    mysql_password = "Azure123."
+    mysql_host = "database-api.conxcscqngr8.us-east-1.rds.amazonaws.com"
+    mysql_database = "database_rest_api"
+
     # Connect to the MySQL database
-    cnx = mysql.connector.connect(user='admin', password='Azure123.', host='ingest-mysql.conxcscqngr8.us-east-1.rds.amazonaws.com', database='ingest-mysql')
+    cnx = mysql.connector.connect(user = mysql_user, password = mysql_password, host = mysql_host, database = mysql_database)
     cursor = cnx.cursor()
 
     # Create table if it doesn't exist
