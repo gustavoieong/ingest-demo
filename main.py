@@ -56,31 +56,31 @@ async def create_upload_file(file: UploadFile = File(...)):
 
     # Open and read CSV file
     #if file.content_type == "text/csv":
-        csv_data = file.file.read().decode("utf-8")
-        temp = "csv_data decoded"
-        csv_reader = csv.reader(csv_data.splitlines())
-        #next(csv_reader)  # skip header row
-        temp = "csv_reader created"
+    csv_data = file.file.read().decode("utf-8")
+    temp = "csv_data decoded"
+    csv_reader = csv.reader(csv_data.splitlines())
+    #next(csv_reader)  # skip header row
+    temp = "csv_reader created"
 
-        # Insert data into MySQL table in batches of 1000
-        batch_size = 1000
-        rows = []
-        for row in csv_reader:
-            rows.append((int(row[0]), row[1]))
-            temp = row
-            if len(rows) == batch_size:
-                insert_query = "INSERT INTO tb_jobs (id, job) VALUES (%d, %s);" #generate_query(file.filename)
-                cursor.executemany(insert_query, rows)
-                rows = []
-
-        # Insert any remaining rows
-        if rows:
+    # Insert data into MySQL table in batches of 1000
+    batch_size = 1000
+    rows = []
+    for row in csv_reader:
+        rows.append((int(row[0]), row[1]))
+        temp = row
+        if len(rows) == batch_size:
             insert_query = "INSERT INTO tb_jobs (id, job) VALUES (%d, %s);" #generate_query(file.filename)
             cursor.executemany(insert_query, rows)
+            rows = []
 
-        cnx.commit()
-        cursor.close()
-        cnx.close()
-        return {"message": "File uploaded successfully."}
+    # Insert any remaining rows
+    if rows:
+        insert_query = "INSERT INTO tb_jobs (id, job) VALUES (%d, %s);" #generate_query(file.filename)
+        cursor.executemany(insert_query, rows)
+
+    cnx.commit()
+    cursor.close()
+    cnx.close()
+    return {"message": "File uploaded successfully."}
     #else:
-     #   return temp #{"message": "Only CSV files are allowed."}
+    #   return temp #{"message": "Only CSV files are allowed."}
