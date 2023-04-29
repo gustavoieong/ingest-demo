@@ -42,10 +42,10 @@ async def create_upload_file(file: UploadFile = File(...)):
 
     # Connect to MySQL database
     cnx  = mysql.connector.connect(
-        'host': 'database-api.conxcscqngr8.us-east-1.rds.amazonaws.com',
-        'user': 'admin',
-        'password': 'Azure123.',
-        'database': 'database_rest_api',
+        host = "database-api.conxcscqngr8.us-east-1.rds.amazonaws.com",
+        user = "admin",
+        password = "Azure123.",
+        database = "database_rest_api"
     }
 
     # Create a cursor object to execute SQL queries
