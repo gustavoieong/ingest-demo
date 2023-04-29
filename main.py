@@ -7,7 +7,7 @@ app = FastAPI()
 
 def generate_table(filename):
     create_table_query = ""
-    if (file == "departments.csv"):
+    if (filename == "departments.csv"):
         create_table_query = """CREATE TABLE IF NOT EXISTS tb_departments (
                              id INT,
                              name VARCHAR(255),
@@ -15,12 +15,12 @@ def generate_table(filename):
                              department_id INT,
                              job_id INT
                              );"""
-    if (file == "hired_employees.csv"):
+    if (filename == "hired_employees.csv"):
         create_table_query = """CREATE TABLE IF NOT EXISTS tb_hired_employees (
                              id INT,
                              department VARCHAR(255)
                              );"""
-    if (file == "jobs.csv"):
+    if (filename == "jobs.csv"):
         create_table_query = """CREATE TABLE IF NOT EXISTS tb_jobs (
                              id INT,
                              job VARCHAR(255)
@@ -29,11 +29,11 @@ def generate_table(filename):
 
 def generate_query(filename):
     insert_query = ""
-    if (file == "departments.csv"):
+    if (filename == "departments.csv"):
         insert_query = """INSERT INTO my_table (id, name, datetime, department_id, job_id) VALUES (%d, %s, %s, %d, %d);"""
-    if (file == "departments.csv"):
+    if (filename == "departments.csv"):
         insert_query = """INSERT INTO my_table (id, job) VALUES (%d, %s);"""
-    if (file == "departments.csv"):
+    if (filename == "departments.csv"):
         insert_query = """INSERT INTO my_table (id, job) VALUES (%d, %s);"""
     return insert_query
 
