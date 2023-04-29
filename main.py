@@ -40,6 +40,8 @@ def generate_query(filename):
 @app.post("/uploadfile/")
 async def create_upload_file(file: UploadFile = File(...)):
 
+    temp = ""
+
     # Connect to MySQL database
     cnx  = mysql.connector.connect(
         host = "database-api.conxcscqngr8.us-east-1.rds.amazonaws.com",
@@ -50,13 +52,15 @@ async def create_upload_file(file: UploadFile = File(...)):
 
     # Create a cursor object to execute SQL queries
     cursor = cnx.cursor()
+    temp = "cursor"
 
     # Open and read CSV file
     if file.content_type == "text/csv":
         csv_data = file.file.read().decode("utf-8")
         csv_reader = csv.reader(csv_data.splitlines())
-        next(csv_reader)  # skip header row
-        
+        #next(csv_reader)  # skip header row
+        temp = "csv_reader created"
+
         # Insert data into MySQL table in batches of 1000
         batch_size = 1000
         rows = []
