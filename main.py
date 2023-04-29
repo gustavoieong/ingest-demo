@@ -11,8 +11,6 @@ mysql_config = {
     'database': 'database_rest_api'
 }
 
-
-
 # Define the batch size
 batch_size = 100
 
@@ -46,7 +44,7 @@ async def create_upload_file(file: UploadFile = File(...)):
             # Append the row to the rows list
             rows.append((id, name, datetime, department_id, job_id))
             # Define the INSERT query to insert rows into the MySQL table
-            insert_query = "INSERT INTO tb_jobs (id, job) VALUES (%s, %s)"
+            insert_query = "INSERT INTO tb_hired_employees (id, name, datetime, department_id, job_id) VALUES (%s, %s, %s, %s, %s)"
 
         if(file.filename == 'jobs.csv'):
             id = int(values[0])
