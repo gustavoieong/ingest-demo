@@ -37,9 +37,8 @@ cursor.execute(query)
 for row in cursor.fetchall():
     print(row)
 
-start_time = time.time()
-while time.time() - start_time < 15:
-    print("SELECT MySQL tables.")
+time.sleep(15)
+
 # Close the cursor and database connections
 cursor.close()
 cnx.close()
