@@ -62,7 +62,7 @@ async def create_upload_file(file: UploadFile = File(...)):
     insert_query = generate_query(file.filename)
 
     # Open the CSV file for reading
-    with open('file.filename') as csvfile:
+    with open(file.filename) as csvfile:
         reader = csv.DictReader(csvfile)
 
         # Insert rows in batches of 1000
