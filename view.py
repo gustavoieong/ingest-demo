@@ -39,3 +39,5 @@ for row in cursor.fetchall():
 # Close the cursor and database connections
 cursor.close()
 cnx.close()
+
+print("SELECT MySQL tables")
