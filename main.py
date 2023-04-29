@@ -2,7 +2,6 @@ import csv
 import mysql.connector
 from fastapi import FastAPI, File, UploadFile
 import traceback
-import request
 
 app = FastAPI()
 
@@ -51,9 +50,6 @@ async def create_upload_file(file: UploadFile = File(...)):
     # Connect to MySQL
     conn = mysql.connector.connect(**db_config)
     cursor = conn.cursor()
-
-    # Get CSV file from request
-    file = request.files['file']
 
     # Loop through the file and insert data into MySQL in batches of 1000 rows
     rows = []
