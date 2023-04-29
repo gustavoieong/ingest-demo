@@ -1,4 +1,5 @@
 import mysql.connector
+import time
 
 mysql_user = "admin"
 mysql_password = "Azure123."
@@ -36,8 +37,9 @@ cursor.execute(query)
 for row in cursor.fetchall():
     print(row)
 
+start_time = time.time()
+while time.time() - start_time < 15:
+    print(SELECT MySQL tables)
 # Close the cursor and database connections
 cursor.close()
 cnx.close()
-
-print("SELECT MySQL tables")
