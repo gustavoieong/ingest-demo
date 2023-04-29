@@ -14,8 +14,8 @@ schema = {
 }
 
 # Connect to MySQL database
-cnx = mysql.connector.connect(user='your_username', password='your_password',
-                              host='your_host', database='your_database')
+cnx = mysql.connector.connect(user='admin', password='Azure123.',
+                              host='database-api.conxcscqngr8.us-east-1.rds.amazonaws.com', database='database_rest_api')
 cursor = cnx.cursor()
 
 # Execute SELECT query to retrieve data from table
