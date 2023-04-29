@@ -1,50 +1,31 @@
 import mysql.connector
-import time
 
-mysql_user = "admin"
-mysql_password = "Azure123."
-mysql_host = "database-api.conxcscqngr8.us-east-1.rds.amazonaws.com"
-mysql_database = "database_rest_api"
+def main():
+    mysql_user = "admin"
+    mysql_password = "Azure123."
+    mysql_host = "database-api.conxcscqngr8.us-east-1.rds.amazonaws.com"
+    mysql_database = "database_rest_api"
+    # Connect to MySQL database
+    mydb = mysql.connector.connect(
+        host = mysql_host,
+        user = mysql_user,
+        password = mysql_password,
+        database = mysql_database
+    )
 
-# Connect to MySQL database
-cnx = mysql.connector.connect(user = mysql_user, password = mysql_password,
-                              host = mysql_host, database = mysql_database)
+    # Create cursor object and execute SELECT query
+    mycursor = mydb.cursor()
+    query = """SELECT * FROM tb_departments;"""
+    mycursor.execute(query)
 
-# Create a cursor object
-#cursor = cnx.cursor()
-cursor = cnx.cursor(buffered=True)
+    # Fetch all rows and display in terminal
+    rows = mycursor.fetchall()
+    for row in rows:
+        print(row)
 
-table_name = "tb_departments"
-cursor.execute(f"DESCRIBE {table_name}")
-time.sleep(13)
+    # Close cursor and database connection
+    mycursor.close()
+    mydb.close()
 
-# Execute a SELECT query
-query = "SELECT * FROM tb_departments"
-cursor.execute(query)
-
-# Fetch all rows and print them
-for row in cursor.fetchall():
-    print(row)
-
-# Execute a SELECT query
-query = "SELECT * FROM tb_hired_employees"
-cursor.execute(query)
-
-# Fetch all rows and print them
-for row in cursor.fetchall():
-    print(row)
-
-# Execute a SELECT query
-query = "SELECT * FROM tb_jobs"
-cursor.execute(query)
-
-# Fetch all rows and print them
-for row in cursor.fetchall():
-    print(row)
-    time.sleep(3)
-
-
-
-# Close the cursor and database connections
-cursor.close()
-cnx.close()
+if __name__ == "__main__":
+    main()
