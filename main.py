@@ -1,17 +1,8 @@
+from fastapi import FastAPI, UploadFile, File
 import csv
 import mysql.connector
-from fastapi import FastAPI, File, UploadFile
-import traceback
 
 app = FastAPI()
-
-# MySQL configuration
-db_config = {
-    'host': 'database-api.conxcscqngr8.us-east-1.rds.amazonaws.com',
-    'user': 'admin',
-    'password': 'Azure123.',
-    'database': 'database_rest_api',
-}
 
 def generate_table(filename):
     create_table_query = ""
@@ -45,39 +36,44 @@ def generate_query(filename):
         insert_query = """INSERT INTO tb_jobs (id, job) VALUES (%d, %s);"""
     return insert_query
 
+# Endpoint to handle file upload
 @app.post("/uploadfile/")
 async def create_upload_file(file: UploadFile = File(...)):
-    # Connect to MySQL
-    conn = mysql.connector.connect(**db_config)
-    cursor = conn.cursor()
 
-    contents = file.file.read().decode('utf-8')
-    file = contents.split("\n")
+    # Connect to MySQL database
+    cnx  = mysql.connector.connect(
+        'host': 'database-api.conxcscqngr8.us-east-1.rds.amazonaws.com',
+        'user': 'admin',
+        'password': 'Azure123.',
+        'database': 'database_rest_api',
+    }
 
-    # Loop through the file and insert data into MySQL in batches of 1000 rows
-    rows = []
-    count = 0
-    for line in file:
-        # Convert bytes to string and split by comma
-        row = line.decode().strip().split(',')
-        # Append row to rows list
-        rows.append(tuple(row))
-        count += 1
-        # Insert rows into MySQL in batches of 1000
-        if count % 1000 == 0:
+    # Create a cursor object to execute SQL queries
+    cursor = cnx.cursor()
+
+    # Open and read CSV file
+    if file.content_type == "text/csv":
+        csv_data = file.file.read().decode("utf-8")
+        csv_reader = csv.reader(csv_data.splitlines())
+        
+        # Insert data into MySQL table in batches of 1000
+        batch_size = 1000
+        rows = []
+        for row in csv_reader:
+            rows.append((int(row[0]), row[1]))
+            if len(rows) == batch_size:
+                insert_query = generate_query(file.filename)
+                cursor.executemany(insert_query, rows)
+                rows = []
+
+        # Insert any remaining rows
+        if rows:
             insert_query = generate_query(file.filename)
             cursor.executemany(insert_query, rows)
-            conn.commit()
-            rows = []
 
-    # Insert any remaining rows
-    if rows:
-        insert_query = generate_query(file.filename)
-        cursor.executemany(insert_query, rows)
-        conn.commit()
-
-    # Close the cursor and connection
-    cursor.close()
-    cnx.close()
-
-    return {"filename": file.filename}
+        cnx.commit()
+        cursor.close()
+        cnx.close()
+        return {"message": "File uploaded successfully."}
+    else:
+        return {"message": "Only CSV files are allowed."}
