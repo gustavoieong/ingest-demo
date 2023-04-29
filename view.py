@@ -36,8 +36,9 @@ cursor.execute(query)
 # Fetch all rows and print them
 for row in cursor.fetchall():
     print(row)
+    time.sleep(3)
 
-time.sleep(15)
+
 
 # Close the cursor and database connections
 cursor.close()
