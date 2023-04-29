@@ -76,4 +76,5 @@ async def create_upload_file(file: UploadFile = File(...)):
         cnx.close()
         return {"message": "File uploaded successfully."}
     else:
-        return {"message": "Only CSV files are allowed."}
+        temp = file.filename
+        return temp #{"message": "Only CSV files are allowed."}
