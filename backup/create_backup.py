@@ -57,6 +57,8 @@ def backup_table_to_avro():
     # Close MySQL connection and cursor
     cursor.close()
     conn.close()
+    
+    print("fin")
 
     # Return Avro file path
     return os.path.abspath(avro_file)

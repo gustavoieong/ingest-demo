@@ -21,5 +21,4 @@ python3 -m uvicorn main:app --reload
 python3 sender.py
 
 # Install dependencies for backup database
-pip install avro-python3
-
+pip install fastavro
