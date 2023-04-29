@@ -15,7 +15,7 @@ def main():
 
     # Create cursor object and execute SELECT query
     mycursor = mydb.cursor()
-    query = """SELECT * FROM tb_departments;"""
+    query = "SELECT * FROM tb_departments;"
     mycursor.execute(query)
 
     # Fetch all rows and display in terminal
