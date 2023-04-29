@@ -1,0 +1,9 @@
+{
+  "namespace": "backup_avro",
+  "type": "record",
+  "name": "tb_departments",
+  "fields": [
+    {"name": "id", "type": "int"},
+    {"name": "department", "type": "string"}
+  ]
+}

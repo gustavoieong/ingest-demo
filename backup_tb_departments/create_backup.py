@@ -12,7 +12,7 @@ mydb = mysql.connector.connect(
 )
 
 # Define the schema for your Avro file
-schema = avro.schema.Parse(open("schema.avsc").read())
+schema = avro.schema.Parse(open("tb_departments.avsc").read())
 
 # Define the batch size for your backup
 batch_size = 1000
