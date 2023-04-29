@@ -62,13 +62,13 @@ async def create_upload_file(file: UploadFile = File(...)):
         for row in csv_reader:
             rows.append((int(row[0]), row[1]))
             if len(rows) == batch_size:
-                insert_query = generate_query(file.filename)
+                insert_query = "INSERT INTO tb_jobs (id, job) VALUES (%d, %s);" #generate_query(file.filename)
                 cursor.executemany(insert_query, rows)
                 rows = []
 
         # Insert any remaining rows
         if rows:
-            insert_query = generate_query(file.filename)
+            insert_query = "INSERT INTO tb_jobs (id, job) VALUES (%d, %s);" #generate_query(file.filename)
             cursor.executemany(insert_query, rows)
 
         cnx.commit()
