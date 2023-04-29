@@ -17,7 +17,11 @@ async def create_upload_file(file: UploadFile = File(...)):
 
     # read CSV file
     #csv_reader = csv.DictReader(await file.read().decode('utf-8').splitlines())
-    csv_reader = csv.DictReader(await file.read().splitlines())
+    archivo = file.read()
+    archivo = archivo.decode('utf-8')
+    archivo = archivo.splitlines()
+    csv_reader = csv.DictReader(await archivo)
+    #csv_reader = csv.DictReader(await file.read().decode('utf-8').splitlines())
 
     # define SQL statement
     insert_stmt = "INSERT INTO tb_jobs (id, job) VALUES (%d, %s)"
