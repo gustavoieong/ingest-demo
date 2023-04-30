@@ -12,7 +12,7 @@ db_config = {
 }
 
 # Avro backup file path
-backup_path = 'backup_tb_departments.avro'
+backup_path = 'backup_tb_jobs.avro'
 
 schema = avro.schema.parse('''
     {
@@ -21,7 +21,7 @@ schema = avro.schema.parse('''
       "name": "backup",
       "fields": [
         {"name": "id", "type": "int"},
-        {"name": "department", "type": "string"}
+        {"name": "job", "type": "string"}
       ]
     }
 ''')
@@ -38,10 +38,10 @@ with open(backup_path, 'rb') as f:
     for record in reader:
         # Extract data from the Avro record
         id_value = record['id']
-        job_value = record['department']
+        job_value = record['job']
 
         # Insert the data into the MySQL database
-        insert_query = 'INSERT INTO tb_departments (id, department) VALUES (%s, %s)'
+        insert_query = 'INSERT INTO tb_jobs (id, job) VALUES (%s, %s)'
         insert_values = (id_value, job_value)
         cursor.execute(insert_query, insert_values)
 
@@ -52,4 +52,4 @@ with open(backup_path, 'rb') as f:
     reader.close()
     cursor.close()
     cnx.close()
-    print("Restore department table")
+    print("Restore job table")
