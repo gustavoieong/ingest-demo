@@ -41,7 +41,7 @@ with open(backup_path, 'rb') as f:
         job_value = record['department']
 
         # Insert the data into the MySQL database
-        insert_query = 'INSERT INTO tb_deparments (id, department) VALUES (%s, %s)'
+        insert_query = 'INSERT INTO tb_departments (id, department) VALUES (%s, %s)'
         insert_values = (id_value, job_value)
         cursor.execute(insert_query, insert_values)
 
