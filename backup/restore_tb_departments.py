@@ -7,8 +7,8 @@ import mysql.connector
 db_config = {
     'user': 'admin',
     'password': 'Azure123.',
-    'host': 'your_host',
-    'database': 'your_database',
+    'host': 'database-api.conxcscqngr8.us-east-1.rds.amazonaws.com',
+    'database': 'database_rest_api',
 }
 
 # Avro backup file path
