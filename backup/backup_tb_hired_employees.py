@@ -8,10 +8,13 @@ schema = avro.schema.parse('''
     {
       "namespace": "example.avro",
       "type": "record",
-      "name": "bckp_tb_department",
+      "name": "backup_tb_hired_employees",
       "fields": [
         {"name": "id", "type": "int"},
-        {"name": "department", "type": "string"}
+        {"name": "name", "type": "string"},
+        {"name": "datetime", "type": "string"},
+        {"name": "department_id", "type": "int"},
+        {"name": "job_id", "type": "int"}
       ]
     }
 ''')
@@ -25,7 +28,7 @@ db_config = {
 }
 
 # Define the name of the table to back up
-table_name = 'tb_departments'
+table_name = 'tb_hired_employees'
 
 # Define the batch size for the backup
 batch_size = 1000
@@ -43,8 +46,10 @@ with mysql.connector.connect(**db_config) as conn:
             break
         # Convert the MySQL rows to Avro records and write them to the data file
         for row in rows:
-            record = {'id': int(row[0]), 'department': str(row[1])}
+            record = {'id': int(row[0]), 'name': str(row[1]), 'datetime': str(row[2]), 'department_id': int(row[3]), 'job_id': int(row[4])}
             avro_file.append(record)
 
 # Close the Avro data file
 avro_file.close()
+
+return {"Backup done"}
