@@ -88,7 +88,7 @@ async def get_report_1():
 async def get_report_2():
     cnx = mysql.connector.connect(**mysql_config)
     cursor = cnx.cursor()
-    query = "SELECT * FROM tb_hired_employees LIMIT 20"
+    query = "SELECT * FROM tb_departments LIMIT 20"
     cursor.execute(query)
     result = cursor.fetchall()
     cursor.close()
