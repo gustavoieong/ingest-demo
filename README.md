@@ -24,3 +24,9 @@ python3 -m uvicorn main:app --reload
 
 # Send CSV files
 python3 sender.py
+
+# Retrive report 1
+curl http://127.0.0.1:8000/report_1
+
+# Retrive report 2
+curl http://127.0.0.1:8000/report_2

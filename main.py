@@ -14,6 +14,74 @@ mysql_config = {
 # Define the batch size
 batch_size = 100
 
+# Query for report 1
+query_report_1 = """
+WITH query_report_1 AS
+(SELECT 
+    dpt.department,
+    jbs.job,
+    COUNT(CASE WHEN QUARTER(DATE(hem.datetime)) = 1 THEN 1 END) Q1,
+    COUNT(CASE WHEN QUARTER(DATE(hem.datetime)) = 2 THEN 1 END) Q2,
+    COUNT(CASE WHEN QUARTER(DATE(hem.datetime)) = 3 THEN 1 END) Q3,
+    COUNT(CASE WHEN QUARTER(DATE(hem.datetime)) = 4 THEN 1 END) Q4
+FROM tb_hired_employees hem
+INNER JOIN tb_departments dpt
+    ON hem.department_id = dpt.department_id
+INNER JOIN tb_jobs jbs
+    ON hem.id_job = jbs.id
+WHERE
+    YEAR(DATE(hem.datetime)) = 2021
+GROUP BY
+    dpt.department, jbs.job
+ORDER BY
+    dpt.department, jbs.job ASC
+)
+;
+"""
+
+# Query for report 2
+query_report_2 = """
+WITH
+summary_2021 AS
+(
+SELECT
+    dpt.id,
+    dpt.department,
+    COUNT(*) hired
+FROM tb_hired_employees hem
+INNER JOIN tb_departments dpt
+    ON hem.department_id = dpt.id
+WHERE
+    YEAR(DATE(hem.datetime)) = 2021
+GROUP BY
+    dpt.id, dpt.department
+),
+summary_years AS
+(
+SELECT
+    dpt.id,
+    dpt.department,
+    COUNT(*) hired
+FROM tb_hired_employees hem
+INNER JOIN tb_departments dpt
+    ON hem.department_id = dpt.id
+WHERE
+    YEAR(DATE(hem.datetime)) <> 2021
+GROUP BY
+    dpt.id, dpt.department
+)
+SELECT
+    sy.id,
+    sy.department,
+    sy.hired
+FROM summary_years sy
+INNER JOIN summary_2021 s21
+    ON sy.id = s21.id
+WHERE sy.hired > s21.hired
+ORDER
+    BY sy.id, sy.department;
+"""
+
 @app.post("/uploadfile/")
 async def create_upload_file(file: UploadFile = File(...)):
     # Open a connection to MySQL
@@ -77,8 +145,7 @@ async def create_upload_file(file: UploadFile = File(...)):
 async def get_report_1():
     cnx = mysql.connector.connect(**mysql_config)
     cursor = cnx.cursor()
-    query = "SELECT * FROM tb_jobs LIMIT 10"
-    cursor.execute(query)
+    cursor.execute(query_report_1)
     result = cursor.fetchall()
     cursor.close()
     return result
@@ -88,9 +155,8 @@ async def get_report_1():
 async def get_report_2():
     cnx = mysql.connector.connect(**mysql_config)
     cursor = cnx.cursor()
-    query = "SELECT * FROM tb_departments LIMIT 20"
-    cursor.execute(query)
+    cursor.execute(query_report_2)
     result = cursor.fetchall()
     cursor.close()
     return result
-    
+
