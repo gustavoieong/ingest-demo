@@ -52,4 +52,4 @@ with mysql.connector.connect(**db_config) as conn:
 # Close the Avro data file
 avro_file.close()
 
-return {"Backup done"}
+print("Backup done")
