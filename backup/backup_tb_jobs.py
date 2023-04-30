@@ -31,7 +31,7 @@ table_name = 'tb_jobs'
 batch_size = 1000
 
 # Open the Avro data file for writing
-avro_file = avro.datafile.DataFileWriter(open('backup.avro', 'wb'), avro.io.DatumWriter(), schema)
+avro_file = avro.datafile.DataFileWriter(open('backup_tb_jobs.avro', 'wb'), avro.io.DatumWriter(), schema)
 
 # Connect to MySQL and retrieve the table data in batches
 with mysql.connector.connect(**db_config) as conn:
