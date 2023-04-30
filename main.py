@@ -16,8 +16,6 @@ batch_size = 100
 
 # Query for report 1
 query_report_1 = """
---WITH query_report_1 AS
---(
 SELECT 
     dpt.department,
     jbs.job,
@@ -36,7 +34,6 @@ GROUP BY
     dpt.department, jbs.job
 ORDER BY
     dpt.department, jbs.job ASC
---)
 ;
 """
 
@@ -80,7 +77,8 @@ INNER JOIN summary_2021 s21
     ON sy.id = s21.id
 WHERE sy.hired > s21.hired
 ORDER
-    BY sy.id, sy.department;
+    BY hired DESC
+;
 """
 
 @app.post("/uploadfile/")
