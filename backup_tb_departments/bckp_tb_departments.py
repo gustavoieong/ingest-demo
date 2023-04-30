@@ -43,7 +43,7 @@ with mysql.connector.connect(**db_config) as conn:
             break
         # Convert the MySQL rows to Avro records and write them to the data file
         for row in rows:
-            record = {'id': str(row[0]), 'department': str(row[1])}
+            record = {'id': int(row[0]), 'department': str(row[1])}
             avro_file.append(record)
 
 # Close the Avro data file
