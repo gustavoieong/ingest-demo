@@ -27,7 +27,7 @@ FROM tb_hired_employees hem
 INNER JOIN tb_departments dpt
     ON hem.department_id = dpt.id
 INNER JOIN tb_jobs jbs
-    ON hem.id_job = jbs.id
+    ON hem.job_id = jbs.id
 WHERE
     YEAR(DATE(hem.datetime)) = 2021
 GROUP BY
