@@ -16,8 +16,9 @@ batch_size = 100
 
 # Query for report 1
 query_report_1 = """
-WITH query_report_1 AS
-(SELECT 
+--WITH query_report_1 AS
+--(
+SELECT 
     dpt.department,
     jbs.job,
     COUNT(CASE WHEN QUARTER(DATE(hem.datetime)) = 1 THEN 1 END) Q1,
@@ -35,7 +36,7 @@ GROUP BY
     dpt.department, jbs.job
 ORDER BY
     dpt.department, jbs.job ASC
-)
+--)
 ;
 """
 
