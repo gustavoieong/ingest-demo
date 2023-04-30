@@ -8,7 +8,7 @@ schema = avro.schema.parse('''
     {
       "namespace": "example.avro",
       "type": "record",
-      "name": "backup_tb_jobs",
+      "name": "backup",
       "fields": [
         {"name": "id", "type": "int"},
         {"name": "job", "type": "string"}
