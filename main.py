@@ -26,7 +26,7 @@ WITH query_report_1 AS
     COUNT(CASE WHEN QUARTER(DATE(hem.datetime)) = 4 THEN 1 END) Q4
 FROM tb_hired_employees hem
 INNER JOIN tb_departments dpt
-    ON hem.department_id = dpt.department_id
+    ON hem.department_id = dpt.id
 INNER JOIN tb_jobs jbs
     ON hem.id_job = jbs.id
 WHERE
