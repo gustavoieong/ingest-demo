@@ -75,6 +75,7 @@ async def create_upload_file(file: UploadFile = File(...)):
 # Report 1 endpoint
 @app.get('/report_1')
 async def get_report_1():
+    cnx = mysql.connector.connect(**mysql_config)
     cursor = cnx.cursor()
     query = "SELECT * FROM tb_jobs LIMIT 10"
     cursor.execute(query)
@@ -85,6 +86,7 @@ async def get_report_1():
 # Report 2 endpoint
 @app.get('/report_2')
 async def get_report_2():
+    cnx = mysql.connector.connect(**mysql_config)
     cursor = cnx.cursor()
     query = "SELECT * FROM tb_hired_employees LIMIT 20"
     cursor.execute(query)
