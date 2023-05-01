@@ -89,11 +89,11 @@ async def create_upload_file(file: UploadFile = File(...)):
 
     # Define the INSERT query to insert rows into the MySQL table
     insert_query = ""
-    if(file.filename == 'departments.csv'):
+    if (file.filename == 'departments.csv'):
         insert_query = """INSERT INTO tb_departments (id, department) VALUES (%s, %s);"""
-    if(file.filename == 'hired_employees.csv'):
+    if (file.filename == 'hired_employees.csv'):
         insert_query = """INSERT INTO tb_hired_employees (id, name, datetime, department_id, job_id) VALUES (%s, %s, %s, %s, %s);"""
-    if(file.filename == 'jobs.csv'):
+    if (file.filename == 'jobs.csv'):
         insert_query = """INSERT INTO tb_jobs (id, job) VALUES (%s, %s);"""
 
     # Read the CSV file in batches of 100 rows
@@ -102,26 +102,36 @@ async def create_upload_file(file: UploadFile = File(...)):
         # Parse the line to get the values
         values = line.decode('utf-8').strip().split(',')
 
-        if(file.filename == 'departments.csv'):
-            id = int(values[0])
-            department = values[1]
-            # Append the row to the rows list
-            rows.append((id, department))
+        if (file.filename == 'departments.csv'):
+            if (int(values[0]).isdigit() and values[1] != ''):
+                id = int(values[0])
+                department = values[1]
+                # Append the row to the rows list
+                rows.append((id, department))
+            else:
+                print(values[0] + values[1])
 
-        if(file.filename == 'hired_employees.csv'):
-            id = int(values[0])
-            name = values[1]
-            datetime = values[2]
-            department_id = int(values[3])
-            job_id = int(values[4])
-            # Append the row to the rows list
-            rows.append((id, name, datetime, department_id, job_id))
+        if (file.filename == 'hired_employees.csv'):
+            if (int(values[0]).isdigit() and values[1] and values[2] and int(values[3]).isdigit() and int(values[4]).isdigit())
+                if (int(values[0]).isdigit() and values[1] != ''):
+                id = int(values[0])
+                name = values[1]
+                datetime = values[2]
+                department_id = int(values[3])
+                job_id = int(values[4])
+                # Append the row to the rows list
+                rows.append((id, name, datetime, department_id, job_id))
+            else:
+                print(values[0] + values[1] + values[2] + values[3] + values[4])
 
-        if(file.filename == 'jobs.csv'):
-            id = int(values[0])
-            job = values[1]
-            # Append the row to the rows list
-            rows.append((id, job))
+        if (file.filename == 'jobs.csv'):
+            if (int(values[0]).isdigit() and values[1] != ''):
+                id = int(values[0])
+                job = values[1]
+                # Append the row to the rows list
+                rows.append((id, job))
+            else:
+                print(values[0] + values[1])
 
         # If the rows list has reached the batch size, insert the rows into the table
         if len(rows) == batch_size:
