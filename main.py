@@ -75,7 +75,7 @@ SELECT
 FROM summary_years sy
 INNER JOIN summary_2021 s21
     ON sy.id = s21.id
-WHERE sy.hired > s21.hired
+WHERE sy.hired < s21.hired
 ORDER
     BY hired DESC
 ;
