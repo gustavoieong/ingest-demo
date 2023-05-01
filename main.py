@@ -112,8 +112,7 @@ async def create_upload_file(file: UploadFile = File(...)):
                 print(values[0] + values[1])
 
         if (file.filename == 'hired_employees.csv'):
-            if (int(values[0]).isdigit() and values[1] != '' and values[2] != '' and int(values[3]).isdigit() and int(values[4]).isdigit())
-                if (int(values[0]).isdigit() and values[1] != ''):
+            if (int(values[0]).isdigit() and values[1] != '' and values[2] != '' and int(values[3]).isdigit() and int(values[4]).isdigit()):
                 id = int(values[0])
                 name = values[1]
                 datetime = values[2]
