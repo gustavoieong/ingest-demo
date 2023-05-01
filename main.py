@@ -73,9 +73,7 @@ SELECT
     sy.department,
     sy.hired
 FROM summary_years sy
-INNER JOIN summary_2021 s21
-    ON sy.id = s21.id
-WHERE sy.hired < s21.hired
+WHERE sy.hired > (SELECT avg(s21.hired) FROM summary_2021 s1)
 ORDER
     BY hired DESC
 ;
