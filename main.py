@@ -73,7 +73,7 @@ SELECT
     sy.department,
     sy.hired
 FROM summary_years sy
-WHERE sy.hired > (SELECT avg(s21.hired) FROM summary_2021 s1)
+WHERE sy.hired > (SELECT avg(s21.hired) FROM summary_2021 s21)
 ORDER
     BY hired DESC
 ;
