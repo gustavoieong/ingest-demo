@@ -103,7 +103,7 @@ async def create_upload_file(file: UploadFile = File(...)):
         values = line.decode('utf-8').strip().split(',')
 
         if (file.filename == 'departments.csv'):
-            if (int(values[0]).isdigit() and values[1] != ''):
+            if (values[0].isdigit() and values[1] != ''):
                 id = int(values[0])
                 department = values[1]
                 # Append the row to the rows list
@@ -112,7 +112,7 @@ async def create_upload_file(file: UploadFile = File(...)):
                 print(values[0] + values[1])
 
         if (file.filename == 'hired_employees.csv'):
-            if (int(values[0]).isdigit() and values[1] != '' and values[2] != '' and int(values[3]).isdigit() and int(values[4]).isdigit()):
+            if (values[0].isdigit() and values[1] != '' and values[2] != '' and values[3].isdigit() and values[4].isdigit()):
                 id = int(values[0])
                 name = values[1]
                 datetime = values[2]
@@ -124,7 +124,7 @@ async def create_upload_file(file: UploadFile = File(...)):
                 print(values[0] + values[1] + values[2] + values[3] + values[4])
 
         if (file.filename == 'jobs.csv'):
-            if (int(values[0]).isdigit() and values[1] != ''):
+            if (values[0].isdigit() and values[1] != ''):
                 id = int(values[0])
                 job = values[1]
                 # Append the row to the rows list
