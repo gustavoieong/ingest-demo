@@ -3,6 +3,12 @@ import mysql.connector
 
 app = FastAPI()
 
+# Get the current date and time
+current_time = datetime.datetime.now()
+
+# Format the current date and time as a string
+timestamp_str = current_time.strftime("%Y-%m-%d %H:%M:%S")
+
 # Define MySQL connection parameters
 mysql_config = {
     'user': 'admin',
@@ -81,6 +87,9 @@ ORDER
 
 @app.post("/uploadfile/")
 async def create_upload_file(file: UploadFile = File(...)):
+    # Open the text file in append mode
+    with open("log.txt", "a") as log_file:
+
     # Open a connection to MySQL
     cnx = mysql.connector.connect(**mysql_config)
     cursor = cnx.cursor()
@@ -128,7 +137,9 @@ async def create_upload_file(file: UploadFile = File(...)):
                 # Append the row to the rows list
                 rows.append((id, job))
             else:
-                print(values[0] + values[1])
+                # Write the log message with the timestamp
+                log_message = f"{timestamp_str} {values[0]}{values[1]}- \n"
+                file.write(log_message)
 
         # If the rows list has reached the batch size, insert the rows into the table
         if len(rows) == batch_size:
@@ -165,4 +176,3 @@ async def get_report_2():
     result = cursor.fetchall()
     cursor.close()
     return result
-
