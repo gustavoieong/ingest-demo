@@ -89,8 +89,10 @@ ORDER
 def write_error(values):
     with open("error_log.txt", "a") as log_file:
         # Write the log message with the timestamp
-        log_message = f"{timestamp_str} {values[0]}{values[1]}- \n"
-        log_file.write(log_message)
+        for column in values:
+            log_message = + str(column) + ","
+        time_stamp = f"{timestamp_str}\n"
+        log_file.write(log_message, time_stamp)
 
 @app.post("/uploadfile/")
 async def create_upload_file(file: UploadFile = File(...)):
