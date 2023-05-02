@@ -89,6 +89,7 @@ ORDER
 def write_error(values):
     with open("error_log.txt", "a") as log_file:
         # Write the log message with the timestamp
+        log_message = ""
         for column in values:
             log_message = log_message + str(column) + ","
         time_stamp = f"{timestamp_str}\n"
