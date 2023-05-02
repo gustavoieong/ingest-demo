@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>REST API - Report 2</title>
+	<style>
+		table {
+			border-collapse: collapse;
+			width: 100%;
+		}
+		th, td {
+			text-align: left;
+			padding: 8px;
+			border-bottom: 1px solid #ddd;
+		}
+		th {
+			background-color: #f2f2f2;
+		}
+	</style>
+</head>
+<body>
+	<h1>REST API - Report 2</h1>
+	<table id="example-table"></table>
+
+	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+	<script>
+		// Fetch data from the API
+		$.getJSON("http://127.0.0.1:8000/report_2", function(data) {
+			// Parse the data into an array of objects
+			var rows = [];
+			$.each(data, function(index, item) {
+				rows.push({
+					"id": item.id,
+					"name": item.department,
+					"value": item.hired
+				});
+			});
+
+			// Generate the table HTML dynamically
+			var table = $("#example-table");
+			$("<tr>").append(
+				$("<th>").text("ID"),
+				$("<th>").text("Department"),
+				$("<th>").text("Hired")
+			).appendTo(table);
+			$.each(rows, function(index, row) {
+				$("<tr>").append(
+					$("<td>").text(row.id),
+					$("<td>").text(row.department),
+					$("<td>").text(row.hired)
+				).appendTo(table);
+			});
+		});
+	</script>
+</body>
+</html>
