@@ -86,6 +86,12 @@ ORDER
 ;
 """
 
+def write_error(values[]):
+    with open("error_log.txt", "a") as log_file:
+    # Write the log message with the timestamp
+    log_message = f"{timestamp_str} {values[0]}{values[1]}- \n"
+    file.write(log_message)
+
 @app.post("/uploadfile/")
 async def create_upload_file(file: UploadFile = File(...)):
     # Open a connection to MySQL
@@ -114,7 +120,7 @@ async def create_upload_file(file: UploadFile = File(...)):
                 # Append the row to the rows list
                 rows.append((id, department))
             else:
-                print(values[0] + values[1])
+                write_error(values[])
 
         if (file.filename == 'hired_employees.csv'):
             if (values[0].isdigit() and values[1] != '' and values[2] != '' and values[3].isdigit() and values[4].isdigit()):
@@ -126,7 +132,7 @@ async def create_upload_file(file: UploadFile = File(...)):
                 # Append the row to the rows list
                 rows.append((id, name, datetime, department_id, job_id))
             else:
-                print(values[0] + values[1] + values[2] + values[3] + values[4])
+                write_error(values[])
 
         if (file.filename == 'jobs.csv'):
             if (values[0].isdigit() and values[1] != ''):
@@ -136,10 +142,7 @@ async def create_upload_file(file: UploadFile = File(...)):
                 rows.append((id, job))
             else:
                 # Open the text file in append mode
-                with open("log.txt", "a") as log_file:
-                    # Write the log message with the timestamp
-                    log_message = f"{timestamp_str} {values[0]}{values[1]}- \n"
-                    file.write(log_message)
+                write_error(values[])
 
         # If the rows list has reached the batch size, insert the rows into the table
         if len(rows) == batch_size:
