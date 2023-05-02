@@ -1,7 +1,7 @@
 import requests
 import sys
 
-url = "http://127.0.0.1:8000/uploadfile"
+url = "http://localhost:8000/uploadfile"
 
 try:
     with open("input/departments.csv", "rb") as f:
