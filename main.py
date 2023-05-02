@@ -90,7 +90,7 @@ def write_error(values):
     with open("error_log.txt", "a") as log_file:
         # Write the log message with the timestamp
         log_message = f"{timestamp_str} {values[0]}{values[1]}- \n"
-        file.write(log_message)
+        log_file.write(log_message)
 
 @app.post("/uploadfile/")
 async def create_upload_file(file: UploadFile = File(...)):
