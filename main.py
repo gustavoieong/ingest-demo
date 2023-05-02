@@ -92,8 +92,8 @@ def write_error(values):
         log_message = ""
         for column in values:
             log_message = log_message + str(column) + ","
-        time_stamp = f"{timestamp_str}\n"
-        log_file.write(log_message, time_stamp)
+        log_message = log_message + f"{timestamp_str}\n"
+        log_file.write(log_message)
 
 @app.post("/uploadfile/")
 async def create_upload_file(file: UploadFile = File(...)):
