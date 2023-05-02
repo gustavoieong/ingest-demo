@@ -90,7 +90,7 @@ def write_error(values):
     with open("error_log.txt", "a") as log_file:
         # Write the log message with the timestamp
         for column in values:
-            log_message = + str(column) + ","
+            log_message = log_message + str(column) + ","
         time_stamp = f"{timestamp_str}\n"
         log_file.write(log_message, time_stamp)
 
